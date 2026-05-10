@@ -44,3 +44,39 @@ libraries by scanning project source files.
 
 More information about PlatformIO Library Dependency Finder
 - https://docs.platformio.org/page/librarymanager/ldf.html
+
+
+# Bibliothèques Externes - Téléphone LoRa STM32F429
+
+Ce répertoire contient les bibliothèques tierces utilisées par le projet.
+
+## 📚 Bibliothèques Incluses
+
+### 1. TinyPrintf - printf minimaliste
+
+- **Dossier** : `tinyprintf/`
+- **Fichiers** : `tinyprintf.h`, `tinyprintf.c`
+- **Version** : 1.2
+- **Licence** : MIT
+- **Auteur** : Georges Menie
+- **Description** : Implémentation légère de printf pour systèmes embarqués.
+  - Supporte : %s, %c, %d, %u, %x, %X, %o, %b, %f (limité)
+  - Pas de buffer interne (sortie caractère par caractère)
+  - Taille : ~2 Ko compilé
+  - Remplace newlib-nano si nécessaire
+
+### Utilisation
+
+```c
+#include "tinyprintf/tinyprintf.h"
+
+// Configurer la sortie
+void putchar_callback(void* ctx, char c) {
+    USART1->TDR = c;
+}
+
+// Initialiser
+init_printf(NULL, putchar_callback);
+
+// Utiliser comme printf standard
+tfp_printf("Hello, %s! Value=%d\n", "World", 42);
